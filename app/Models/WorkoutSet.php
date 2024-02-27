@@ -84,6 +84,7 @@ class WorkoutSet extends Model
                 'config_workout_exercises.name as exercise_name',
                 'config_workout_exercises.rows as exercise_rows',
                 'config_workout_exercises.description as exercise_description',
+                'config_workout_exercises.link as exercise_link',
             )
             ->get()
             ->first();

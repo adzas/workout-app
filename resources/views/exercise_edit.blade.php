@@ -30,6 +30,8 @@
         <br>
         <textarea placeholder="dodatkowe uwagi" id="description" name="description" rows="4" ></textarea>
         <br>
+        <a href="{{ $exerciseInWork->exercise_link }}" target="_blank" rel="noopener noreferrer">zobacz</a>
+        <br>
         <br>
 
         <button type="submit">Wyślij</button>

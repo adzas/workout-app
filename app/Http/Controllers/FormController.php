@@ -69,7 +69,7 @@ class FormController extends Controller
         $exerciseInWork = $mWorkoutSet->nextExerciseToWork($workout_id);
         if (null === $exerciseInWork) {
             session()->put('message', 'Trening ukończony! Dane zostały zapisane.');
-            $url = route('end', ['workout_id' => $workout_id]);
+            $url = route('end_workout', ['workout_id' => $workout_id]);
     
             return redirect($url);
         }

@@ -17,6 +17,7 @@
     @foreach($workout_sets as $workout)
 
         <a href="{{ url('workout_exercises_show', ['id' => $workout->id]) }}">{{$workout->name}}</a>
+        <br>
 
     @endforeach
     
