@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <title>AGames</title>
     </head>
@@ -16,7 +17,9 @@
     
     @foreach($workout_sets as $workout)
 
-        <a href="{{ url('workout_exercises_show', ['id' => $workout->id]) }}">{{$workout->name}}</a>
+        <a class="click-element" href="{{ url('workout_exercises_show', ['id' => $workout->id]) }}">{{$workout->name}}</a>
+        -
+        <a class="click-element" href="{{ url('workout_exercises_history', ['id' => $workout->id]) }}">historia treningów</a>
         <br>
 
     @endforeach

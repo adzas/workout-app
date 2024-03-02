@@ -46,8 +46,14 @@ class FormController extends Controller
             ->where('m.id', $exercise_id)
             ->get()
             ->first();
+        // TODO: move to link separator
+        $V_ID = null;
+        $parts = explode('v=', $exercise->link);
+        if (isset($parts[1])) {
+            $V_ID = $parts[1];
+        }
 
-        return view('exercise_show', ['exercise' => $exercise]);
+        return view('exercise_show', ['exercise' => $exercise, 'V_ID' => $V_ID]);
     }
 
     /**
@@ -73,8 +79,14 @@ class FormController extends Controller
     
             return redirect($url);
         }
+        // TODO: move to link separator
+        $V_ID = null;
+        $parts = explode('v=', $exerciseInWork->exercise_link);
+        if (isset($parts[1])) {
+            $V_ID = $parts[1];
+        }
 
-        return view('exercise_edit', ['exerciseInWork' => $exerciseInWork]);
+        return view('exercise_edit', ['exerciseInWork' => $exerciseInWork, 'V_ID' => $V_ID]);
     }
 
     /**
@@ -110,5 +122,45 @@ class FormController extends Controller
         ->first();
 
         return view('workout_report', ['workout_report' => $workout_report]);
+    }
+
+    public function showExercisesHistoryByWorkoutID(int $config_workout_id)
+    {
+        $my_workouts = DB::table('workout')
+        ->where('config_workout_id', $config_workout_id)
+        ->select(DB::raw('TIMESTAMPDIFF(MINUTE, created_at, updated_at) AS time'), 'id', 'date')
+        ->limit(25)
+        ->get();
+
+        return view('workout_history', ['my_workouts' => $my_workouts]);
+    }
+
+    public function showMyWorkoutDetailsByID(int $workout_id)
+    {
+        $my_workout = DB::table('workout')
+        ->where('id', $workout_id)
+        ->select(DB::raw('TIMESTAMPDIFF(MINUTE, created_at, updated_at) AS time'), 'id', 'date')
+        ->get()
+        ->first();
+
+        $my_rows = DB::table('workout_series', 'm')
+        ->join('workout_row','workout_row.workout_series_id','=','m.id')
+        ->join('config_workout_exercises','workout_row.config_workout_exercises_id','=','config_workout_exercises.id')
+        ->where('m.workout_id', $workout_id)
+        ->select(
+            DB::raw('TIMESTAMPDIFF(MINUTE, workout_row.created_at, workout_row.updated_at) AS time'),
+            'workout_row.updated_at as row_date',
+            'workout_row.result as result',
+            'workout_row.description as description',
+            'config_workout_exercises.rows as exercise_row',
+            'config_workout_exercises.name as exercise_name',
+            'config_workout_exercises.link as exercise_link',
+            'config_workout_exercises.description as exercise_description',
+        )
+        ->orderBy('m.id')
+        ->orderBy('workout_row.id')
+        ->get();
+
+        return view('my_workout_details', ['my_workout' => $my_workout, 'my_rows' => $my_rows]);
     }
 }

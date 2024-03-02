@@ -25,3 +25,6 @@ Route::get('/exercise_show/{id}', [FormController::class, 'showExercise'])->name
 Route::get('/workout_start/{workout_set_id}', [FormController::class, 'StartWorkout'])->name('workout_start');
 Route::get('/exercise_to_work/{workout_id}', [FormController::class, 'exerciseToWork'])->name('exercise_to_work');
 Route::post('/exercise_work', [FormController::class, 'workExercise'])->name('exercise_work');
+
+Route::get('/workout_exercises_history/{id}', [FormController::class, 'showExercisesHistoryByWorkoutID'])->name('workout_exercises_history');
+Route::get('/my_workout_details/{id}', [FormController::class, 'showMyWorkoutDetailsByID'])->name('my_workout_details');
