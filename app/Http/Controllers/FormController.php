@@ -79,6 +79,16 @@ class FormController extends Controller
     
             return redirect($url);
         }
+        $ExerciseQueryBuilder = $mWorkoutSet->getExerciseBuilder($workout_id);
+        $all = $ExerciseQueryBuilder
+        ->select('r.id')
+        ->groupBy('m.id')
+        ->count();
+        $done = $ExerciseQueryBuilder
+        ->whereNotNull('r.result')
+        ->select('r.id')
+        ->groupBy('m.id')
+        ->count();
         // TODO: move to link separator
         $V_ID = null;
         $parts = explode('v=', $exerciseInWork->exercise_link);
@@ -86,7 +96,7 @@ class FormController extends Controller
             $V_ID = $parts[1];
         }
 
-        return view('exercise_edit', ['exerciseInWork' => $exerciseInWork, 'V_ID' => $V_ID]);
+        return view('exercise_edit', ['exerciseInWork' => $exerciseInWork, 'V_ID' => $V_ID, 'all' => $all, 'done' => $done]);
     }
 
     /**

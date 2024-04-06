@@ -12,6 +12,16 @@
 
     <h1>{{ $exerciseInWork->exercise_name }}</h1>
 
+    <?php
+        $pDone = ( $done / $all ) * 100;
+    ?>
+    <div style="border: 1px solid lightgray;">
+      <div style="background-color:#383;height:2px;width:{{$pDone}}%"></div>
+    </div>
+    <div style="width: 100%; text-align:right; font-size:.8em;">
+    <span style="">{{$done . '/' . $all}}</span>
+    </div>
+
     @if(session('message'))
         <p>{{ session('message') }}</p>
     @endif
@@ -27,20 +37,79 @@
         <h5>{{ $exerciseInWork->exercise_description }}</h5>
         <label for="name">wyniki:</label>
         <br>
-        <input type="text" id="result" name="result" required>
+        <input type="text" id="result" name="result" autocomplete="off" required autofocus>
+        <br>
+        <!-- TIMER --> 
+        <div id="timer">00:00:00</div>
+        <div id="controls">
+            <button type="button" onclick="start()">Start</button>
+            <button type="button" onclick="stop()">Stop</button>
+            <button type="button" onclick="reset_()">Reset</button>
+        </div>
         <br>
         <textarea placeholder="dodatkowe uwagi" id="description" name="description" rows="4" ></textarea>
         <br>
-        <a href="{{ $exerciseInWork->exercise_link }}" target="_blank" rel="noopener noreferrer">zobacz</a>
-        <br>
         @if (null !== $V_ID)
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{$V_ID}}" frameborder="0" allowfullscreen></iframe>
+            <details>
+                <summary>zobacz</summary>
+                <p>
+                    <a href="{{ $exerciseInWork->exercise_link }}" target="_blank" rel="noopener noreferrer">zobacz</a>
+                    <iframe width="100%" height="auto" src="https://www.youtube.com/embed/{{$V_ID}}" frameborder="0" allowfullscreen></iframe>
+                </p>
+            </details>
+        @else
+            <a href="{{ $exerciseInWork->exercise_link }}" target="_blank" rel="noopener noreferrer">zobacz</a>
         @endif
-        <br>
         <br>
 
         <button type="submit">Wyślij</button>
     </form>
     
+    <!-- TIMER SCRIPTS -->
+    <script>
+        let timerInterval;
+        let milliseconds = 0, seconds = 0, minutes = 0;
+        
+        function start() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 10); // Aktualizuj co 10 milisekund
+        }
+        
+        function stop() {
+            clearInterval(timerInterval);
+        }
+        
+        function reset_() {
+            console.log('test');
+            clearInterval(timerInterval);
+            milliseconds = 0;
+            seconds = 0;
+            minutes = 0;
+            document.getElementById("timer").innerText = "00.00.00";
+        }
+        
+        function updateTimer() {
+            milliseconds++;
+            if (milliseconds >= 99) {
+                milliseconds = 0;
+                seconds++;
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+            }
+            const formattedTime = pad(minutes) + ":" + pad(seconds) + "." + pad(milliseconds, 2);
+            document.getElementById("timer").innerText = formattedTime;
+        }
+        
+        function pad(val, length = 2) {
+            let valString = val + "";
+            while (valString.length < length) {
+                valString = "0" + valString;
+            }
+            return valString;
+        }
+        
+        </script>
     </body>
 </html>

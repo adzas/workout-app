@@ -17,10 +17,11 @@
     
     @foreach($workout_sets as $workout)
 
-        <a class="click-element" href="{{ url('workout_exercises_show', ['id' => $workout->id]) }}">{{$workout->name}}</a>
+    <div class="click-element">
+        <a href="{{ url('workout_exercises_show', ['id' => $workout->id]) }}">{{$workout->name}}</a>
         -
-        <a class="click-element" href="{{ url('workout_exercises_history', ['id' => $workout->id]) }}">historia treningów</a>
-        <br>
+        <a href="{{ url('workout_exercises_history', ['id' => $workout->id]) }}">historia treningów</a>
+    </div>
 
     @endforeach
     

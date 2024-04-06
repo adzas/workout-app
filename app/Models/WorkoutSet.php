@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExerciseInWork;
 
@@ -90,5 +91,18 @@ class WorkoutSet extends Model
             ->first();
 
         return $workout_row;
+    }
+
+    /**
+     * Return query builder for exercise by workout id
+     */
+    public function getExerciseBuilder(int $workout_id): Builder
+    {
+        $query = DB::table('workout', 'm')
+        ->join('workout_series as s', 's.workout_id', '=', 'm.id')
+        ->join('workout_row as r', 'r.workout_series_id', '=', 's.id')
+        ->where('m.id', $workout_id);
+
+        return $query;
     }
 }

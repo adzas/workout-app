@@ -1,6 +1,10 @@
 
+.antialiased {
+    padding: 1em;
+}
+
 .click-element {
-    padding: 2em;
+    padding: .4em;
 }
 
 /* public/css/styles.css */
